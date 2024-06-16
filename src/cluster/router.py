@@ -36,6 +36,29 @@ async def get_collection_by_id(collection_id: str):
         print(e)
 
 
+
+async def get_articles_and_split():
+    try:
+        articles = await fetch_articles()
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    if not articles:
+        return []
+
+    titles = [item.title for item in articles]
+
+
+    """
+    split articles in chunks of 100 articles each
+    """
+    chunk_size = 100
+    articles_chunk = [titles[i:i + chunk_size] for i in range(0, len(titles), chunk_size)]
+
+    """
+    should create collections from each chunks
+    """
+
 @router.get("/similarity")
 async def compare_titles():
     try:
@@ -48,6 +71,14 @@ async def compare_titles():
 
     titles = [item.title for item in articles]
 
+
+    """
+    split articles in chunks of 100 articles each
+    """
+    chunk_size = 100
+    articles_chunk = [titles[i:i + chunk_size] for i in range(0, len(titles), chunk_size)]
+
+    
     # Encode titles using the pre-trained model
     try:
         embeddings = model.encode(titles)
@@ -59,7 +90,7 @@ async def compare_titles():
     similarities = cosine_similarity(embeddings)
 
     # Threshold for similarity
-    threshold = 0.7
+    threshold = 0.6
 
     # Create collections of articles
     collections = []

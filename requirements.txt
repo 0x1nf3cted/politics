@@ -4,4 +4,15 @@ requests
 beautifulsoup4
 psycopg2
 python-dotenv
+sentence_transformers
 scikit-learn
+prisma
+bs4
+axios
+prisma
+asyncio
+aiohttp
+news-please
+urllib
+fastapi
+lxml_html_clean

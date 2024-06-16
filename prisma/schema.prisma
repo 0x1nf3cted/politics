@@ -13,27 +13,29 @@ datasource db {
 generator client {
   provider = "prisma-client-py"
 }
-
 model Newspaper {
   id          String    @id @unique @default(cuid())
   name        String
-  orientation String
-  url         String
+  orientation String?
+  url         String?
   Article     Article[]
+  Rssfeed     Rssfeed[]
 }
 
 model Article {
-  id           String      @id @unique @default(cuid())
-  source       Newspaper   @relation(fields: [newspaperId], references: [id])
-  url          String
-  author       String
-  title        String
-  description  String
-  category     String
-  date         String
-  newspaperId  String
-  Collection   Collection? @relation(fields: [collectionId], references: [id])
-  collectionId String?
+  id               String      @id @unique @default(cuid())
+  source           Newspaper   @relation(fields: [newspaperId], references: [id])
+  url              String
+  author           String?
+  title            String
+  description      String
+  image_url        String
+  general_category String
+  category         String
+  date             String
+  newspaperId      String
+  Collection       Collection? @relation(fields: [collectionId], references: [id])
+  collectionId     String?
 }
 
 model Collection {
@@ -42,4 +44,13 @@ model Collection {
   title    String
   category String
   articles Article[]
+}
+
+model Rssfeed {
+  id                String    @id @unique @default(cuid())
+  newspaper         Newspaper @relation(fields: [newspaperId], references: [id])
+  general_category  String
+  specific_category String
+  rss_link          String
+  newspaperId       String
 }
